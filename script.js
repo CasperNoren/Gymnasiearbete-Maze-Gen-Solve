@@ -234,6 +234,12 @@ function startValuesInit() {
 	noLoop();
 }
 
+function addStartOptions() {
+	var optionForm = document.getElementById("form1");
+
+	console.log(optionForm);
+}
+
 function aStar() {
 	if (openSet.length > 0) {
 		var winner = 0;
@@ -399,11 +405,11 @@ function startProgram() {
 		doMaze = true;
 	}
 
-	document.getElementById("mazeText").remove();
-	document.getElementById("wallsText").remove();
-	document.getElementById("formWalls").remove();
-	document.getElementById("showMaze").remove();
-	document.getElementById("startBtn").remove();
+	document.getElementById("mazeText").style.visibility = "hidden";
+	document.getElementById("wallsText").style.visibility = "hidden";
+	document.getElementById("formWalls").style.visibility = "hidden";
+	document.getElementById("showMaze").style.visibility = "hidden";
+	document.getElementById("startBtn").style.visibility = "hidden";
 
 	let pBtn = document.createElement("button");
 	pBtn.id = "pauseBtn";
