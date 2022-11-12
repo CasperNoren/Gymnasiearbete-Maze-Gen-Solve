@@ -1,63 +1,57 @@
-@import url('https://fonts.googleapis.com/css?family=VT323&display=swap');
+@import url("https://fonts.googleapis.com/css?family=VT323&display=swap");
 
-*
-{
-  margin: 0;  /* Tar bort tomrum */
-  padding: 0; /* Tar bort tomrum */
-  background: black;
-  font-family: 'VT323', monospace;
+* {
+	margin: 0; /* Tar bort tomrum */
+	padding: 0; /* Tar bort tomrum */
+	background: black;
+	font-family: "VT323", monospace;
 }
 
-#defaultCanvas0
-{
-  background: white;
-  border-color: #333333;
-  border-width: 0.5vw;
-  margin-top: 1vh;
-  border-style: solid;
-  margin-left: auto;
-  margin-right: auto;
-  display: block;
+#defaultCanvas0 {
+	background: white;
+	border-color: #333333;
+	border-width: 0.5vw;
+	margin-top: 1vh;
+	border-style: solid;
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
 }
 
-#top
-{
-    width: 100vw;
-    height: 8vh;
-    background: #333333;
+#top {
+	width: 100vw;
+	height: 8vh;
+	background: #333333;
 }
 
-#top h1
-{
-  background: inherit;
-  color: white;
-  text-align: center;
-  font-size: 6vh;
+#top h1 {
+	background: inherit;
+	color: white;
+	text-align: center;
+	font-size: 6vh;
 }
 
-#formDiv
-{
-  width: 15vw;
-  margin-top: 5vw;
-  font-size: 2vw;
-  text-align: center;
+#formDiv {
+	width: 15vw;
+	margin-top: 5vw;
+	font-size: 2vw;
+	text-align: center;
 }
 
-#formDiv form, input, button
-{
-  color: white;
+#formDiv input,
+button,
+p {
+	color: white;
 }
 
-#formDiv input
-{
-  width: 15vw;
-  height: 5vh;
-  font-size: 4vh;
+#formDiv input {
+	width: 15vw;
+	height: 5vh;
+	font-size: 4vh;
 }
 
-#formDiv button
-{
-  width: 15.2vw;
-  height: 5vh;
-  font-size: 4vh;
+#formDiv button {
+	width: 15.2vw;
+	height: 5vh;
+	font-size: 4vh;
 }
