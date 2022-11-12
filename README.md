@@ -28,6 +28,7 @@ Missing (files weren't from the finished project):
   - ❓  Probably forgotten something
 </div>
 
+---
 ### 👁️ Looking back
 I notice that I've learnt a lot about code structure, best practices, writing good/clean code, some features or techniques I wasn't aware of and conventional formatting. There's definetly a lot I would do different if I wrote it today.
 
