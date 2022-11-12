@@ -314,13 +314,15 @@ function mazeGen() {
 }
 
 function removeExtraWalls() {
-	for (var i = 0; i < cols * rows * (percentOfWallsToRemove * 0.01); i++) {
+	var amountOfWalls = getAmountOfWalls();
+
+	for (var i = 0; i < amountOfWalls * (percentOfWallsToRemove * 0.01); i++) {
 		var a = grid[floor(random(0, cols))][floor(random(0, rows))];
 		var b = a.getNeighborWithWall();
 		if (b) {
-			//Fail safe incase the function returns undefined
 			removeWalls(a, b);
 		} else {
+			//Fail safe incase the function returns undefined
 			i--;
 		}
 	}
@@ -345,6 +347,31 @@ function removeWalls(a, b) {
 	}
 }
 
+function getAmountOfWalls() {
+	var amountOfWalls = 0;
+
+	// Check all walls of every cell
+	for (gridX in grid) {
+		gridRow = grid[gridX];
+		for (gridY in gridRow) {
+			for (cellWall in grid[gridX][gridY].walls) {
+				if (grid[gridX][gridY].walls[cellWall]) {
+					amountOfWalls++;
+				}
+			}
+		}
+	}
+
+	// Edge walls can't be used for anything so they get ignored
+	var amountOfEdgeWalls = cols * 2 + rows * 2 + 4;
+	amountOfWalls -= amountOfEdgeWalls;
+
+	// Every non-edge "wall" is made up of two walls, one for each of the cells it is between
+	amountOfWalls = floor(amountOfWalls / 2);
+
+	return amountOfWalls;
+}
+
 function startProgram() {
 	var percentOfWalls = document.getElementById("formWalls").value;
 
@@ -354,11 +381,6 @@ function startProgram() {
 		return undefined;
 	}
 	percentOfWallsToRemove = parseInt(percentOfWalls);
-	if (percentOfWallsToRemove < 0 || percentOfWallsToRemove > 50) {
-		document.getElementById("form1").reset();
-		alert("Error: Please input a valid number between 0-50");
-		return undefined;
-	}
 	if (document.getElementById("showMaze").checked == true) {
 		doMaze = true;
 	}
