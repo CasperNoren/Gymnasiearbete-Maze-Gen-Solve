@@ -22,9 +22,9 @@ In this reposiory:
   - ✨ 2 generation display modes
   - 💨 Percentage wall removal
   - 🤯 Pausing
+  - 🔄 Reset button
   
 Missing (files weren't from the finished project):
-  - 🔄 Reset button
   - ❓  Probably forgotten something
 </div>
 
