@@ -1,4 +1,5 @@
 function removeFromArray(arr, elt) {
+	// Removes element from array without knowing position
 	for (var i = arr.length - 1; i >= 0; i--) {
 		if (arr[i] == elt) {
 			arr.splice(i, 1);
@@ -7,7 +8,7 @@ function removeFromArray(arr, elt) {
 }
 
 function heuristic(a, b) {
-	//var d = dist(a.i, a.j, b.i, b.j)
+	// Gets the absolute distance between two cells
 	var d = abs(a.i - b.i) + abs(a.j - b.j);
 	return d;
 }
@@ -38,10 +39,16 @@ function Cell(i, j) {
 	this.h = 0;
 	this.previous = undefined;
 	this.visited = false;
-	this.walls = [true, true, true, true]; //TOP RIGHT BOTTOM LEFT
+	// Walls follow: TOP RIGHT BOTTOM LEFT
+	this.walls = [true, true, true, true];
 
 	this.checkNeighbors = function () {
+		// Returns a random neighboring cell that hasn't been ...
+		// ... visited by the backtrackinger
+
 		var neighbors = [];
+
+		// Checks for edges because they don't have neighbors
 		if (j > 0) {
 			var top = grid[this.i][this.j - 1];
 		} else {
@@ -63,6 +70,7 @@ function Cell(i, j) {
 			var left = grid[-1];
 		}
 
+		// Unvisited are but into the array
 		if (top && !top.visited) {
 			neighbors.push(top);
 		}
@@ -85,12 +93,16 @@ function Cell(i, j) {
 	};
 
 	this.show = function () {
+		// Draws the walls of the cell
+
 		var x = this.i * w;
 		var y = this.j * h;
 		stroke(255);
-		//strokeWeight(1);
 
+		// Accounts for size of the cell
 		strokeWeight(floor(150 / ((cols + rows) / 2)));
+
+		// Draw the walls
 		if (this.walls[0]) {
 			line(x, y, x + w, y);
 		}
@@ -104,21 +116,29 @@ function Cell(i, j) {
 			line(x, y + w, x, y);
 		}
 
+		// Only fill with color if visited
 		if (this.visited) {
 			noStroke();
 			fill(255, 0, 255, 100);
 			rect(x, y, w, w);
 		}
 	};
+
 	this.highlight = function () {
+		// Highlights this cell in a different color
+		// Used for showing the current cell of the backtracker
+
 		var x = this.i * w;
 		var y = this.j * w;
+
 		noStroke();
 		fill(0, 0, 255, 100);
 		rect(x, y, w, w);
 	};
 
 	this.getNeighbors = function () {
+		// Returns all neighbors not seperated by a wall
+
 		var neighbors = [];
 		if (!this.walls[0]) {
 			neighbors.push(grid[this.i][this.j - 1]);
@@ -136,6 +156,12 @@ function Cell(i, j) {
 	};
 
 	this.getNeighborWithWall = function () {
+		// Returns a random neighboring cell that is seperated ...
+		// ... by a wall
+
+		var neighbors = [];
+
+		// Checks for edges because they don't have neighbors
 		var neighbors = [];
 		if (j > 0) {
 			var top = grid[this.i][this.j - 1];
@@ -158,6 +184,7 @@ function Cell(i, j) {
 			var left = grid[-1];
 		}
 
+		// Only push if seperated by wall
 		if (top && this.walls[0]) {
 			neighbors.push(grid[this.i][this.j - 1]);
 		}
@@ -183,6 +210,8 @@ function Cell(i, j) {
 function setup() {
 	createCanvas(650, 650);
 	startValuesInit();
+
+	// Makes it so pressing enter on the input starts the program
 	var wallsInput = document.getElementById("formWalls");
 	wallsInput.addEventListener("keydown", (e) => {
 		if (e.key === "Enter") {
@@ -192,9 +221,15 @@ function setup() {
 }
 
 function draw() {
+	// Runs every frame when not paused
+	// Runs the correct function for the frame
+
+	// This should be done with states
 	if (!mazeDone) {
+		// Generate the maze until it's done
 		mazeGen();
 	} else {
+		// Draw all the cells
 		for (let i = 0; i < cols; i++) {
 			for (let j = 0; j < rows; j++) {
 				grid[i][j].show();
@@ -202,14 +237,17 @@ function draw() {
 		}
 		if (!extraWallsRemoved) {
 			removeExtraWalls();
+			// Only runs once
 			extraWallsRemoved = true;
 		} else {
+			// The pathfinding algorithm
 			aStar();
 		}
 	}
 }
 
 function startValuesInit() {
+	// Set all values to the starting ones and clear canvas
 	clear();
 
 	w = width / cols;
@@ -225,14 +263,19 @@ function startValuesInit() {
 	doMaze = false;
 	paused = true;
 
+	// Make the array 2D
 	for (var i = 0; i < cols; i++) {
 		grid[i] = new Array(rows);
 	}
+
+	// Add cell to every spot in the grid
 	for (var i = 0; i < cols; i++) {
 		for (var j = 0; j < rows; j++) {
 			grid[i][j] = new Cell(i, j);
 		}
 	}
+
+	// Start and end cells
 	start = grid[0][0];
 	end = grid[cols - 1][rows - 1];
 	openSet.push(start);
@@ -249,6 +292,7 @@ function addStartOptions() {
 		document.getElementById("resetBtn").remove();
 	}
 
+	// The elements aren't removed so they just need to be set to visible
 	document.getElementById("mazeText").style.visibility = "visible";
 	document.getElementById("wallsText").style.visibility = "visible";
 	document.getElementById("formWalls").style.visibility = "visible";
@@ -258,7 +302,10 @@ function addStartOptions() {
 }
 
 function aStar() {
+	// Pathfinding algorithm
+
 	if (openSet.length > 0) {
+		// Choose the cell with best chance of being the correct next step
 		var winner = 0;
 		for (var i = 0; i < openSet.length; i++) {
 			if (openSet[i].f < openSet[winner].f) {
@@ -268,22 +315,29 @@ function aStar() {
 		current = openSet[winner];
 
 		if (current == end) {
+			// SHORTEST PATH FOUND!
 			console.log("SOLVED");
 			document.getElementById("pauseBtn").remove();
 			noLoop();
 		}
 
+		// Cell has now been stepped through
 		removeFromArray(openSet, current);
 		closedSet.push(current);
 
+		// Goes through all available neighbors
+		// Available being without a wall and not closed
 		var neighbors = current.getNeighbors();
 		for (var i = 0; i < neighbors.length; i++) {
 			var neighbor = neighbors[i];
 
 			var newPath = false;
 			if (!closedSet.includes(neighbor) && !neighbor.wall) {
+				// Setting how many steps it takes to reach neighbor from the starting cell
 				var tempG = current.g + 1;
 				if (openSet.includes(neighbor)) {
+					// Another cell might already have a shorter path to the cell ...
+					// ... so check before setting the new
 					if (tempG < neighbor.g) {
 						neighbor.g = tempG;
 						newPath = true;
@@ -294,19 +348,24 @@ function aStar() {
 					openSet.push(neighbor);
 				}
 				if (newPath) {
+					// How good a cell is for the path considers both steps taken from the starting cell ...
+					// ... including walking around walls and the absolute distance to the end not considering walls
 					neighbor.h = heuristic(neighbor, end);
 					neighbor.f = neighbor.g + neighbor.h;
+					// Remembers that the path to it is from the current one so the path can be drawn later
 					neighbor.previous = current;
 				}
 			}
 		}
 	} else {
+		// Failsafe in case an unsolvable maze is created
+		// Should never happen unless there is a bug
 		console.log("No Solution");
 		document.getElementById("pauseBtn").remove();
 		noLoop();
 	}
 
-	//Find the path
+	// Find the path
 	path = [];
 	var temp = current;
 	path.push(temp);
@@ -330,22 +389,30 @@ function aStar() {
 }
 
 function mazeGen() {
+	// Backtracker that generates the maze
+
+	// Highlights current cell for visibility
 	current.visited = true;
 	current.highlight();
 	if (doMaze) {
 		current.show();
 	}
 
+	// Gets random unvisited neighbor
 	var next = current.checkNeighbors();
 	if (next) {
+		// Makes cell visited
 		next.visited = true;
 		stack.push(current);
 		removeWalls(current, next);
+		// Next iteration will use "next" cell which has now been set to visited
 		current = next;
 	} else if (stack.length > 0) {
+		// Sets current to the cell visited before the current one
 		current = stack.pop();
 	}
 	if (current == start) {
+		// Because it backtracks it will always go back to the start
 		mazeDone = true;
 	}
 }
@@ -353,19 +420,24 @@ function mazeGen() {
 function removeExtraWalls() {
 	var amountOfWalls = getAmountOfWalls();
 
+	// Removes one wall every loop unless the failsafe is hit
 	for (var i = 0; i < amountOfWalls * (percentOfWallsToRemove * 0.01); i++) {
 		var a = grid[floor(random(0, cols))][floor(random(0, rows))];
 		var b = a.getNeighborWithWall();
 		if (b) {
 			removeWalls(a, b);
 		} else {
-			//Fail safe incase the function returns undefined
+			// Fail safe incase the function returns undefined
+			// Will happen when a cell doesn't have neighbors
 			i--;
 		}
 	}
 }
 
 function removeWalls(a, b) {
+	// Removes the two walls (making up a single wall) between two cells
+
+	// Because they are only 1 (abs) apart direction can be gotten this way:
 	var x = a.i - b.i;
 	if (x === 1) {
 		a.walls[3] = false;
@@ -374,6 +446,8 @@ function removeWalls(a, b) {
 		a.walls[1] = false;
 		b.walls[3] = false;
 	}
+
+	// Because they are only 1 (abs) apart direction can be gotten this way:
 	var y = a.j - b.j;
 	if (y === 1) {
 		a.walls[0] = false;
@@ -385,6 +459,8 @@ function removeWalls(a, b) {
 }
 
 function getAmountOfWalls() {
+	// Gets all walls not counting edges
+
 	var amountOfWalls = 0;
 
 	// Check all walls of every cell
@@ -410,18 +486,22 @@ function getAmountOfWalls() {
 }
 
 function startProgram() {
-	var percentOfWalls = document.getElementById("formWalls").value;
+	// Fixes all the HTML elements and gets their values before starting the program
 
+	var percentOfWalls = document.getElementById("formWalls").value;
+	// Check for user error
 	if (isNaN(percentOfWalls)) {
 		document.getElementById("form1").reset();
 		alert("Error: Please input a valid number");
 		return undefined;
 	}
+	// In case of floats
 	percentOfWallsToRemove = parseInt(percentOfWalls);
 	if (document.getElementById("showMaze").checked == true) {
 		doMaze = true;
 	}
 
+	// Hide all options
 	document.getElementById("mazeText").style.visibility = "hidden";
 	document.getElementById("wallsText").style.visibility = "hidden";
 	document.getElementById("formWalls").style.visibility = "hidden";
@@ -430,6 +510,7 @@ function startProgram() {
 
 	let optionsForm = document.getElementById("formDiv");
 
+	// Add reset and pause buttons
 	let resetBtn = document.createElement("button");
 	resetBtn.id = "resetBtn";
 	resetBtn.addEventListener(
@@ -441,7 +522,8 @@ function startProgram() {
 	);
 	resetBtn.innerHTML = "Reset";
 
-	// Because the other element are hidden it looks nicer as the first element
+	// Because the other element are hidden they look nicer as the first elements
+	// Will be the second element because it's added first
 	document
 		.getElementById("formDiv")
 		.insertBefore(resetBtn, optionsForm.firstChild);
@@ -460,11 +542,14 @@ function startProgram() {
 	// Because the other element are hidden it looks nicer as the first element
 	document.getElementById("formDiv").insertBefore(pBtn, optionsForm.firstChild);
 
+	// Start running
 	paused = false;
 	loop();
 }
 
 function doPause() {
+	// Switch between paused and unpaused
+
 	if (paused) {
 		loop();
 		paused = false;
@@ -475,6 +560,8 @@ function doPause() {
 }
 
 function resetProject() {
+	// Refreshing without refreshing page
+
 	startValuesInit();
 	addStartOptions();
 }
