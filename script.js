@@ -182,24 +182,7 @@ function Cell(i, j) {
 
 function setup() {
 	createCanvas(650, 650);
-	w = width / cols;
-	h = height / rows;
-	closedSet = [];
-	openSet = [];
-
-	for (var i = 0; i < cols; i++) {
-		grid[i] = new Array(rows);
-	}
-	for (var i = 0; i < cols; i++) {
-		for (var j = 0; j < rows; j++) {
-			grid[i][j] = new Cell(i, j);
-		}
-	}
-	start = grid[0][0];
-	end = grid[cols - 1][rows - 1];
-	openSet.push(start);
-	current = start;
-	noLoop();
+	startValuesInit();
 }
 
 function draw() {
@@ -218,6 +201,54 @@ function draw() {
 			aStar();
 		}
 	}
+}
+
+function startValuesInit() {
+	clear();
+
+	w = width / cols;
+	h = height / rows;
+	closedSet = [];
+	openSet = [];
+	stack = [];
+	doOnce = false;
+	mazeDone = false;
+	extraWallsRemoved = false;
+	percentOfWallsToRemove = 0;
+	path = [];
+	doMaze = false;
+	paused = true;
+
+	for (var i = 0; i < cols; i++) {
+		grid[i] = new Array(rows);
+	}
+	for (var i = 0; i < cols; i++) {
+		for (var j = 0; j < rows; j++) {
+			grid[i][j] = new Cell(i, j);
+		}
+	}
+	start = grid[0][0];
+	end = grid[cols - 1][rows - 1];
+	openSet.push(start);
+	current = start;
+	noLoop();
+}
+
+function addStartOptions() {
+	// Might not exists so check is necessary
+	if (document.getElementById("pauseBtn")) {
+		document.getElementById("pauseBtn").remove();
+	}
+	if (document.getElementById("resetBtn")) {
+		document.getElementById("resetBtn").remove();
+	}
+
+	document.getElementById("mazeText").style.visibility = "visible";
+	document.getElementById("wallsText").style.visibility = "visible";
+	document.getElementById("formWalls").style.visibility = "visible";
+	document.getElementById("formWalls").value = "";
+	document.getElementById("showMaze").style.visibility = "visible";
+	document.getElementById("startBtn").style.visibility = "visible";
 }
 
 function aStar() {
@@ -385,11 +416,29 @@ function startProgram() {
 		doMaze = true;
 	}
 
-	document.getElementById("mazeText").remove();
-	document.getElementById("wallsText").remove();
-	document.getElementById("formWalls").remove();
-	document.getElementById("showMaze").remove();
-	document.getElementById("startBtn").remove();
+	document.getElementById("mazeText").style.visibility = "hidden";
+	document.getElementById("wallsText").style.visibility = "hidden";
+	document.getElementById("formWalls").style.visibility = "hidden";
+	document.getElementById("showMaze").style.visibility = "hidden";
+	document.getElementById("startBtn").style.visibility = "hidden";
+
+	let optionsForm = document.getElementById("formDiv");
+
+	let resetBtn = document.createElement("button");
+	resetBtn.id = "resetBtn";
+	resetBtn.addEventListener(
+		"click",
+		function () {
+			resetProject();
+		},
+		false
+	);
+	resetBtn.innerHTML = "Reset";
+
+	// Because the other element are hidden it looks nicer as the first element
+	document
+		.getElementById("formDiv")
+		.insertBefore(resetBtn, optionsForm.firstChild);
 
 	let pBtn = document.createElement("button");
 	pBtn.id = "pauseBtn";
@@ -402,7 +451,8 @@ function startProgram() {
 	);
 	pBtn.innerHTML = "Pause";
 
-	document.getElementById("formDiv").appendChild(pBtn);
+	// Because the other element are hidden it looks nicer as the first element
+	document.getElementById("formDiv").insertBefore(pBtn, optionsForm.firstChild);
 
 	paused = false;
 	loop();
@@ -416,4 +466,9 @@ function doPause() {
 		noLoop();
 		paused = true;
 	}
+}
+
+function resetProject() {
+	startValuesInit();
+	addStartOptions();
 }
