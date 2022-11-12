@@ -376,11 +376,6 @@ function startProgram() {
 		return undefined;
 	}
 	percentOfWallsToRemove = parseInt(percentOfWalls);
-	if (percentOfWallsToRemove < 0 || percentOfWallsToRemove > 50) {
-		document.getElementById("form1").reset();
-		alert("Error: Please input a valid number between 0-50");
-		return undefined;
-	}
 	if (document.getElementById("showMaze").checked == true) {
 		doMaze = true;
 	}
