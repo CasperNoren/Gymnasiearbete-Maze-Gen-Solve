@@ -183,6 +183,12 @@ function Cell(i, j) {
 function setup() {
 	createCanvas(650, 650);
 	startValuesInit();
+	var wallsInput = document.getElementById("formWalls");
+	wallsInput.addEventListener("keydown", (e) => {
+		if (e.key === "Enter") {
+			startProgram();
+		}
+	});
 }
 
 function draw() {
