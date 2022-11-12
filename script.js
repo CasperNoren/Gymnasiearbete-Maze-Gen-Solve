@@ -318,9 +318,10 @@ function removeExtraWalls() {
 		var a = grid[floor(random(0, cols))][floor(random(0, rows))];
 		var b = a.getNeighborWithWall();
 		if (b) {
-			//Fail safe incase the function returns undefined
 			removeWalls(a, b);
 		} else {
+			//Fail safe incase the function returns undefined
+			console.log("Failsafe hit");
 			i--;
 		}
 	}
@@ -343,6 +344,26 @@ function removeWalls(a, b) {
 		a.walls[2] = false;
 		b.walls[0] = false;
 	}
+}
+
+function getAmountOfWalls() {
+	var amountOfWalls = 0;
+	for (gridX in grid) {
+		gridRow = grid[gridX];
+		for (gridY in gridRow) {
+			for (cellWall in grid[gridX][gridY].walls) {
+				if (grid[gridX][gridY].walls[cellWall]) {
+					amountOfWalls++;
+				}
+			}
+		}
+	}
+
+	// Every non-edge "wall" is made up of two walls, one for each of the cells it is between
+	// Won't be completely exact but it's good enough
+	amountOfWalls = floor(amountOfWalls / 2);
+
+	return amountOfWalls;
 }
 
 function startProgram() {
