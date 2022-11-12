@@ -239,6 +239,9 @@ function addStartOptions() {
 	if (document.getElementById("pauseBtn")) {
 		document.getElementById("pauseBtn").remove();
 	}
+	if (document.getElementById("resetBtn")) {
+		document.getElementById("resetBtn").remove();
+	}
 
 	document.getElementById("mazeText").style.visibility = "visible";
 	document.getElementById("wallsText").style.visibility = "visible";
@@ -419,6 +422,24 @@ function startProgram() {
 	document.getElementById("showMaze").style.visibility = "hidden";
 	document.getElementById("startBtn").style.visibility = "hidden";
 
+	let optionsForm = document.getElementById("formDiv");
+
+	let resetBtn = document.createElement("button");
+	resetBtn.id = "resetBtn";
+	resetBtn.addEventListener(
+		"click",
+		function () {
+			resetProject();
+		},
+		false
+	);
+	resetBtn.innerHTML = "Reset";
+
+	// Because the other element are hidden it looks nicer as the first element
+	document
+		.getElementById("formDiv")
+		.insertBefore(resetBtn, optionsForm.firstChild);
+
 	let pBtn = document.createElement("button");
 	pBtn.id = "pauseBtn";
 	pBtn.addEventListener(
@@ -431,9 +452,7 @@ function startProgram() {
 	pBtn.innerHTML = "Pause";
 
 	// Because the other element are hidden it looks nicer as the first element
-	document
-		.getElementById("formDiv")
-		.insertBefore(pBtn, document.getElementById("formDiv").firstChild);
+	document.getElementById("formDiv").insertBefore(pBtn, optionsForm.firstChild);
 
 	paused = false;
 	loop();
