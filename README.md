@@ -20,11 +20,12 @@ In this reposiory:
   - 📍 Maze generation
   - 🗺️ A* path finding
   - ✨ 2 generation display modes
-  - 💨 Variable wall removal
+  - 💨 Percentage wall removal
   - 🤯 Pausing
+  
 Missing (files weren't from the finished project):
-  - Reset button
-  - Probably forgotten something
+  - 🔄 Reset button
+  - ❓  Probably forgotten something
 </div>
 
 ### 👁️ Looking back
