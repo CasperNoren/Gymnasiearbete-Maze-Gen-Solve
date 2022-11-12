@@ -235,9 +235,17 @@ function startValuesInit() {
 }
 
 function addStartOptions() {
-	var optionForm = document.getElementById("form1");
+	// Might not exists so check is necessary
+	if (document.getElementById("pauseBtn")) {
+		document.getElementById("pauseBtn").remove();
+	}
 
-	console.log(optionForm);
+	document.getElementById("mazeText").style.visibility = "visible";
+	document.getElementById("wallsText").style.visibility = "visible";
+	document.getElementById("formWalls").style.visibility = "visible";
+	document.getElementById("formWalls").value = "";
+	document.getElementById("showMaze").style.visibility = "visible";
+	document.getElementById("startBtn").style.visibility = "visible";
 }
 
 function aStar() {
@@ -422,7 +430,10 @@ function startProgram() {
 	);
 	pBtn.innerHTML = "Pause";
 
-	document.getElementById("formDiv").appendChild(pBtn);
+	// Because the other element are hidden it looks nicer as the first element
+	document
+		.getElementById("formDiv")
+		.insertBefore(pBtn, document.getElementById("formDiv").firstChild);
 
 	paused = false;
 	loop();
