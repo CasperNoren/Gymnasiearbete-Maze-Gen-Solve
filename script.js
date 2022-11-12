@@ -314,14 +314,15 @@ function mazeGen() {
 }
 
 function removeExtraWalls() {
-	for (var i = 0; i < cols * rows * (percentOfWallsToRemove * 0.01); i++) {
+	var amountOfWalls = getAmountOfWalls();
+
+	for (var i = 0; i < amountOfWalls * (percentOfWallsToRemove * 0.01); i++) {
 		var a = grid[floor(random(0, cols))][floor(random(0, rows))];
 		var b = a.getNeighborWithWall();
 		if (b) {
 			removeWalls(a, b);
 		} else {
 			//Fail safe incase the function returns undefined
-			console.log("Failsafe hit");
 			i--;
 		}
 	}
