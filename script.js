@@ -182,24 +182,7 @@ function Cell(i, j) {
 
 function setup() {
 	createCanvas(650, 650);
-	w = width / cols;
-	h = height / rows;
-	closedSet = [];
-	openSet = [];
-
-	for (var i = 0; i < cols; i++) {
-		grid[i] = new Array(rows);
-	}
-	for (var i = 0; i < cols; i++) {
-		for (var j = 0; j < rows; j++) {
-			grid[i][j] = new Cell(i, j);
-		}
-	}
-	start = grid[0][0];
-	end = grid[cols - 1][rows - 1];
-	openSet.push(start);
-	current = start;
-	noLoop();
+	startValuesInit();
 }
 
 function draw() {
@@ -218,6 +201,37 @@ function draw() {
 			aStar();
 		}
 	}
+}
+
+function startValuesInit() {
+	clear();
+
+	w = width / cols;
+	h = height / rows;
+	closedSet = [];
+	openSet = [];
+	stack = [];
+	doOnce = false;
+	mazeDone = false;
+	extraWallsRemoved = false;
+	percentOfWallsToRemove = 0;
+	path = [];
+	doMaze = false;
+	paused = true;
+
+	for (var i = 0; i < cols; i++) {
+		grid[i] = new Array(rows);
+	}
+	for (var i = 0; i < cols; i++) {
+		for (var j = 0; j < rows; j++) {
+			grid[i][j] = new Cell(i, j);
+		}
+	}
+	start = grid[0][0];
+	end = grid[cols - 1][rows - 1];
+	openSet.push(start);
+	current = start;
+	noLoop();
 }
 
 function aStar() {
