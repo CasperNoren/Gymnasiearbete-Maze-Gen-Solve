@@ -349,6 +349,8 @@ function removeWalls(a, b) {
 
 function getAmountOfWalls() {
 	var amountOfWalls = 0;
+
+	// Check all walls of every cell
 	for (gridX in grid) {
 		gridRow = grid[gridX];
 		for (gridY in gridRow) {
@@ -360,8 +362,11 @@ function getAmountOfWalls() {
 		}
 	}
 
+	// Edge walls can't be used for anything so they get ignored
+	var amountOfEdgeWalls = cols * 2 + rows * 2 + 4;
+	amountOfWalls -= amountOfEdgeWalls;
+
 	// Every non-edge "wall" is made up of two walls, one for each of the cells it is between
-	// Won't be completely exact but it's good enough
 	amountOfWalls = floor(amountOfWalls / 2);
 
 	return amountOfWalls;
