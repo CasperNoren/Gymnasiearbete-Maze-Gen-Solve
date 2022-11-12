@@ -448,3 +448,8 @@ function doPause() {
 		paused = true;
 	}
 }
+
+function resetProject() {
+	startValuesInit();
+	addStartOptions();
+}
